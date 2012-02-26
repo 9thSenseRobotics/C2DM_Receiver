@@ -1,0 +1,6 @@
+this file only exists so that the directory will be created
+and that makes both Elipse and git happy
+
+and we do not want to send the bin and gen directory files to git.
+
+
