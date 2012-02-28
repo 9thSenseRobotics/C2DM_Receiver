@@ -21,23 +21,24 @@ public class C2DMMessageReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		String action = intent.getAction();
-		Log.d("C2DM", "Message Receiver called");
-		Toast.makeText(context, "Message Receiver called", Toast.LENGTH_SHORT).show();
+		//Log.d("C2DM", "Message Receiver called");
+		//Toast.makeText(context, "Message Receiver called", Toast.LENGTH_SHORT).show();
 
 		// check to see if this is a C2DM receive notification
 		if ("com.google.android.c2dm.intent.RECEIVE".equals(action)) {
-			Log.w("C2DM", "Received message");
-			Toast.makeText(context, "Received message", Toast.LENGTH_SHORT).show();
+			//Log.w("C2DM", "Received message");
+			//Toast.makeText(context, "Received message", Toast.LENGTH_SHORT).show();
 			final String payload = intent.getStringExtra("payload");
-			Log.d("C2DM", "dmControl: payload = " + payload);
-
+			//Log.d("C2DM", "dmControl: payload = " + payload);
+			String message = "sending payload = " + payload;
+			Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
 			broadcastIntent(context, payload);
 		}
 	}
 
 	void broadcastIntent(Context context, String RobotCommand) {
 		Intent BroadcastIntent = new Intent(ROBOT_COMMAND_INTENT);
-		BroadcastIntent.putExtra("command", RobotCommand);
+		BroadcastIntent.putExtra("robotCommand", RobotCommand);
 		context.sendBroadcast(BroadcastIntent);
         Toast.makeText(context, RobotCommand, Toast.LENGTH_SHORT).show();
 	}
