@@ -1,11 +1,10 @@
 package com.denbar.C2DM_Receiver;
 
 import android.app.Activity;
-
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -24,18 +23,29 @@ public class C2DM_ReceiverActivity extends Activity {
 	public final static String AUTH = "authentication";
 	public final static String REGISTERED = "registered";
 
+	private String bluetoothAddress;
+	private EditText textbox, bluetoothAddressText, statusMessageText;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		// fill in the name box
+		Resources robotResources = getResources();
 		SharedPreferences prefs = getSharedPreferences("com.denbar.C2DM_Receiver", MODE_WORLD_WRITEABLE );
 		String phoneName = prefs.getString("phoneName", "default name");
-
+		bluetoothAddress = prefs.getString("bluetooth",robotResources.getString(R.string.bluetoothAddress));
 		setContentView(R.layout.main);
 
-		EditText textbox = (EditText) findViewById(R.id.phoneName);
+		C2DMApplication.getInstance().setBluetoothAddress(bluetoothAddress);
+
+		textbox = (EditText) findViewById(R.id.phoneName);
+		bluetoothAddressText = (EditText) findViewById(R.id.bluetoothAddress);
+		statusMessageText = (EditText) findViewById(R.id.statusMessage);
+
 		textbox.setText(phoneName);
+		bluetoothAddressText.setText(bluetoothAddress);
+		statusMessageText.setText(R.string.statusMessage);
 
 	}
 
@@ -72,26 +82,42 @@ public class C2DM_ReceiverActivity extends Activity {
 	 * (called when "Save Name" button is pressed)
 	 * @param view
 	 */
-	public void saveName(View view) {
+	public void saveNameAndAddress(View view) {
 		// get the phone name out of the textbot
 		EditText textbox = (EditText) findViewById(R.id.phoneName);
+		EditText bluetoothAddressText = (EditText) findViewById(R.id.bluetoothAddress);
 		SharedPreferences prefs = getSharedPreferences("com.denbar.C2DM_Receiver", MODE_WORLD_WRITEABLE );
 		Editor edit = prefs.edit();
 		String thisName = textbox.getText().toString();
+		bluetoothAddress = bluetoothAddressText.getText().toString();
 
-		// check to make sure that the name
-		if (thisName.length() > 0)
+    	// do some checking to see if the entries are valid
+		// check bluetooth
+		boolean checkGood = true;
+		String status = "Parameter entries:";
+		if ( (!bluetoothAddress.contains(":")) || (!(bluetoothAddress.length() == 17)))
+    	{
+			status += " bluetooth wrong format";
+			checkGood = false;
+    	}
+
+    	// check the name
+		if (thisName.length() == 0) // will this throw an NPE?  check null?
 		{
-			// put the phone's name into the shared preferences so we'll remember it
-			// in other places and between runs
+			status += " name missing ";
+			checkGood = false;
+		}
+
+		if (checkGood)
+		{
+			edit.putString("bluetoothAddress", bluetoothAddress);
 			edit.putString("phoneName", thisName);
 			edit.commit();
-
-			// display a notification that we saved it
-			Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
-		} else {
-			// display a notification that the user must enter a name
-			Toast.makeText(this, "Enter a name", Toast.LENGTH_SHORT).show();
+			C2DMApplication.getInstance().setBluetoothAddress(bluetoothAddress);
+			statusMessageText.setText("Name and bluetooth address saved");
+		}
+		else {
+			statusMessageText.setText(status + "errors");
 		}
 	}
 }

@@ -3,9 +3,12 @@ package com.denbar.C2DM_Receiver;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
+import at.abraxas.amarino.Amarino;
+import at.abraxas.amarino.AmarinoIntent;
 
 /**
  * Service that attempts to register with C2DM from Google
@@ -44,6 +47,10 @@ public class TeloStartupService extends Service {
 	public void onStart(Intent intent, int startId) {
 
 		super.onStart(intent, startId);
+
+		//registerReceiver(connectionStateReceiver, new IntentFilter(AmarinoIntent.ACTION_CONNECTED));
+        Amarino.connect(this, "00:06:66:06:9A:9E");
+        //Amarino.connect(this, "00:06:66:46:5B:72");
 
 		Toast.makeText(this, "Service started, attempting registration...", Toast.LENGTH_SHORT).show();
 

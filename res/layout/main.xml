@@ -26,12 +26,34 @@
 	    <requestFocus />
 	</EditText>
 
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+	    android:layout_height="70dp"
+    >
+	    <TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="match_parent"
+	        android:text="Blutooth address:"
+	        />
+	    <EditText
+		    android:id="@+id/bluetoothAddress"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content" >
+		</EditText>
+	</LinearLayout>
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="saveName"
-        android:text="Save Name" >
+        android:onClick="saveNameAndAddress"
+        android:text="Save Entries" >
     </Button>
 
+    <EditText
+	    android:id="@+id/statusMessage"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content" >
+	</EditText>
 
 </LinearLayout>

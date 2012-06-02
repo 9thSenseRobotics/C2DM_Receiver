@@ -2,4 +2,6 @@
 <resources>
     <string name="hello">C2DM_Receiver</string>
     <string name="app_name">C2DM_Receiver</string>
+    <string name="bluetoothAddress">00:06:66:46:5A:91</string>
+    <string name="statusMessage">Status messages show up here</string>
 </resources>
